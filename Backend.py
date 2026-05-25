@@ -1,5 +1,6 @@
 import openmeteo_requests
 import pandas as pd
+import json
 import requests_cache
 from geopy.exc import GeocoderServiceError
 from retry_requests import retry
@@ -52,4 +53,21 @@ def GetWeather(Location):
     return htemp, hprec, hcode, hwind, hcloud, ctemp, cday, cprec, ccode, ccloud, cwind
 with open("zip.txt", "r") as file:
     location = file.read().strip()
-GetWeather(location)
+Weather=GetWeather(location)
+WeatherJson = {
+    "Hourly": {
+        "Temperature": htemp.tolist(),
+        "Precipitation": hprec.tolist(),
+        "WeatherCode": hcode.tolist(),
+        "WindSpeed": hwind.tolist(),
+        "CloudCover": hcloud.tolist()
+    },
+    "Current": {
+        "Temperature": ctemp.tolist(),
+        "IsDay": cday.tolist(),
+        "Precipitation": cprec.tolist(),
+        "WeatherCode": ccode.tolist(),
+        "CloudCover": ccloud.tolist(),
+        "WindSpeed": cwind.tolist()
+    }}
+print(WeatherJson)
