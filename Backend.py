@@ -53,21 +53,21 @@ def GetWeather(Location):
     return htemp, hprec, hcode, hwind, hcloud, ctemp, cday, cprec, ccode, ccloud, cwind
 with open("zip.txt", "r") as file:
     location = file.read().strip()
-Weather=GetWeather(location)
+htemp, hprec, hcode, hwind, hcloud, ctemp, cday, cprec, ccode, ccloud, cwind = GetWeather(location)
 WeatherJson = {
     "Hourly": {
-        "Temperature": htemp.tolist(),
-        "Precipitation": hprec.tolist(),
-        "WeatherCode": hcode.tolist(),
-        "WindSpeed": hwind.tolist(),
-        "CloudCover": hcloud.tolist()
+        "Temperature": htemp.round(1).tolist(),       # Rounds to 1 decimal place (e.g., 14.5)
+        "Precipitation": hprec.round(2).tolist(),     # Rounds to 2 decimal places (e.g., 0.15)
+        "WeatherCode": hcode.astype(int).tolist(),    # Weather codes are integers, no decimals needed!
+        "WindSpeed": hwind.round(1).tolist(),         # Rounds to 1 decimal place
+        "CloudCover": hcloud.astype(int).tolist()     # Cloud cover is a percentage (0-100), make it an int
     },
     "Current": {
-        "Temperature": ctemp.tolist(),
-        "IsDay": cday.tolist(),
-        "Precipitation": cprec.tolist(),
-        "WeatherCode": ccode.tolist(),
-        "CloudCover": ccloud.tolist(),
-        "WindSpeed": cwind.tolist()
+        "Temperature": int(round(ctemp, 2)),
+        "IsDay": int(cday),
+        "Precipitation": int(round(cprec, 2)),
+        "WeatherCode": int(ccode),
+        "CloudCover": int(ccloud),
+        "WindSpeed": int(round(cwind, 2))
     }}
 print(WeatherJson)
